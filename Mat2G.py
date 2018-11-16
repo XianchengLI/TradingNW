@@ -8,6 +8,10 @@ def MatLi2G(list):
     Matrix = np.mat(list)
     graph = nx.from_numpy_matrix(Matrix)
 
+def plot_graph():
+    nx.draw(G)
+    plt.show()
+
 
 G = nx.Graph()
 G.add_edge(1, 4)

@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn import preprocessing
+from Convert_raw import *
 
 def MatLi2G(list):
     Matrix = np.mat(list)
@@ -127,8 +128,27 @@ def cal_power_dependence(Graph,cal_type, method=0):
 
     return res
 
-G = nx.Graph()
-G.add_edge(1, 4)
-G.add_edge(2, 4)
-G.add_edge(3, 4)
+if __name__ == "__main__":
+    # G = nx.Graph()
+    # G.add_edge(1, 4)
+    # G.add_edge(2, 4)
+    # G.add_edge(3, 4)
+    pre_path = 'D:\Data\Data from OEC\SITC_'
+    year = 1962
+    path = pre_path + str(year) + '.csv'
+    df_year = pd.read_csv(path, header=None)
+    df_year.columns = ['year', 'ori', 'des', 'SITC', 'exp_v', 'imp_v']
+
+    coun = pd.read_csv('D:\Data\Data from OEC\country_names.csv')
+    coun['index'] = coun.index
+    coun2ind = coun['id_3char']
+    dict_coun2ind = coun2ind.to_dict()
+    dict_coun2ind = {v: k for k, v in dict_coun2ind.items()}
+    df_year['id_coun'] = df_year['ori'].map(dict_coun2ind)
+    df_year['id_coun'] = df_year['id_coun'].map(lambda x: int(x))
+
+    #Cmap =
+    SITC = 10
+    graph,Cmap = scv2nw_sole_product(df_year, SITC, exp=1, Cmap=None)
+    res = cal_power_dependence(graph, 1, method=0)
 
